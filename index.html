@@ -133,7 +133,8 @@
       };
 
       const endpoint = "https://script.google.com/macros/s/AKfycbz7degXt4PoPANiIIEe2MKn935bunqwvjfTbilr3C0CaNbEUIgo7akxsN_0CjeY8UQ/exec";
-
+      console.log("Enviando datos a:", endpoint);
+      console.log("Payload:", datos);
       fetch(endpoint, {
         method: "POST",
         headers: {
@@ -147,6 +148,7 @@
         form.reset();
       })
       .catch(error => {
+        console.error("Error completo:", error);
         document.getElementById("mensaje").textContent = "Error: " + error.message;
       });
     });
