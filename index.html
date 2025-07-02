@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro Económico</title>
+  <style>
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background-color: #fff;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      font-size: 1.6rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+      font-size: 1rem;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #mensaje {
+      text-align: center;
+      font-size: 0.95rem;
+      color: green;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Registro Económico</h2>
+    <form id="form">
+      <label for="tipo">Tipo:</label>
+      <select name="tipo" id="tipo" required>
+        <option value="" disabled selected>Seleccionar tipo</option>
+        <option value="ingreso">Ingreso</option>
+        <option value="gasto">Gasto</option>
+        <option value="inversion">Inversión</option>
+      </select>
+
+      <label for="monto">Monto:</label>
+      <input type="number" name="monto" id="monto" step="0.01" required>
+
+      <label for="categoria">Categoría:</label>
+      <input type="text" name="categoria" id="categoria" required>
+
+      <label for="descripcion">Descripción:</label>
+      <input type="text" name="descripcion" id="descripcion">
+
+      <label id="extra-label" for="extra">Fuente / Medio / Implementación:</label>
+      <input type="text" name="extra" id="extra" required>
+
+      <button type="submit">Guardar</button>
+    </form>
+    <p id="mensaje"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const tipoInput = form.tipo;
+    const extraLabel = document.getElementById('extra-label');
+    const extraInput = document.getElementById('extra');
+
+    tipoInput.addEventListener('change', () => {
+      const tipo = tipoInput.value;
+      document.body.setAttribute('data-tipo', tipo);
+
+      if (tipo === 'ingreso') {
+        extraLabel.textContent = 'Fuente:';
+        extraInput.placeholder = 'Ej. sueldo, transferencia';
+      } else if (tipo === 'gasto') {
+        extraLabel.textContent = 'Medio de pago:';
+        extraInput.placeholder = 'Ej. tarjeta, efectivo';
+      } else if (tipo === 'inversion') {
+        extraLabel.textContent = 'Implementación:';
+        extraInput.placeholder = 'Ej. broker, plataforma';
+      }
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const datos = {
+        tipo: tipoInput.value,
+        monto: parseFloat(form.monto.value),
+        categoria: form.categoria.value,
+        descripcion: form.descripcion.value,
+        extra: extraInput.value
+      };
+
+      // Reemplazá con tu propio endpoint de Apps Script
+      const endpoint = "https://script.google.com/macros/s/AKfycbz7degXt4PoPANiIIEe2MKn935bunqwvjfTbilr3C0CaNbEUIgo7akxsN_0CjeY8UQ/exec";
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datos)
+      })
+      .then(response => response.text())
+      .then(mensaje => {
+        document.getElementById("mensaje").textContent = mensaje || "¡Registro guardado!";
+        form.reset();
+      })
+      .catch(error => {
+        document.getElementById("mensaje").textContent = "Error: " + error.message;
+      });
+    });
+  </script>
+</body>
+</html>
