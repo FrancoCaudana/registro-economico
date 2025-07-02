@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Registro Económico</title>
   <style>
     html {
@@ -110,8 +110,6 @@
 
     tipoInput.addEventListener('change', () => {
       const tipo = tipoInput.value;
-      document.body.setAttribute('data-tipo', tipo);
-
       if (tipo === 'ingreso') {
         extraLabel.textContent = 'Fuente:';
         extraInput.placeholder = 'Ej. sueldo, transferencia';
@@ -134,7 +132,6 @@
         extra: extraInput.value
       };
 
-      // Reemplazá con tu propio endpoint de Apps Script
       const endpoint = "https://script.google.com/macros/s/AKfycbz7degXt4PoPANiIIEe2MKn935bunqwvjfTbilr3C0CaNbEUIgo7akxsN_0CjeY8UQ/exec";
 
       fetch(endpoint, {
